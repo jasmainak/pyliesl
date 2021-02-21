@@ -35,6 +35,7 @@ def test_find_lrcmd_raises():
 
 
 def test_labrecorder(mock, markermock, tmpdir):
+    from pyxdf import load_xdf
     lr = LabRecorderCLI()
     filename = tmpdir / "recorder_test.xdf"
     streamargs = [{"type": "EEG"}, {"type": "Marker"}]
@@ -42,6 +43,8 @@ def test_labrecorder(mock, markermock, tmpdir):
     time.sleep(3)
     lr.stop_recording()
     assert filename.exists()
+    xdf, hdr = load_xdf(filename)
+    assert len(xdf) == 2
     if filename.exists():
         filename.unlink()
 
